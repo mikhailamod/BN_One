@@ -1,0 +1,49 @@
+Data for Genres
+rock: 856, percentage: 0.2
+alternative/indie: 50, percentage: 0.02
+electronic/dance: 320, percentage: 0.08
+soul: 294, percentage: 0.07
+classical/soundtrack: 29, percentage: 0.01
+pop: 1391, percentage: 0.33
+hip-hop/rnb: 431, percentage: 0.11
+disco: 115, percentage: 0.03
+swing: 30, percentage: 0.01
+folk: 152, percentage: 0.04
+country: 302, percentage: 0.08
+jazz: 131, percentage: 0.04
+religious: 38, percentage: 0.01
+blues: 92, percentage: 0.03
+reggae: 53, percentage: 0.02
+
+Data for Readability
+x<3: 0, percentage: 0.0
+3<x<5: 2517, percentage: 0.79
+5<x<7: 701, percentage: 0.22
+>=7: 5, percentage: 0.01
+
+Data for Difficulty
+<4: 148, percentage: 0.05
+4<x<5: 2369, percentage: 0.74
+5<x<7: 701, percentage: 0.22
+>7: 5, percentage: 0.01
+
+Data for Number of Duplicates
+<20: 1357, percentage: 0.43
+20<x<30: 810, percentage: 0.26
+30<x<50: 809, percentage: 0.26
+>50: 247, percentage: 0.08
+
+Data for Number of Words
+<200: 698, percentage: 0.22
+200<x<300: 1043, percentage: 0.33
+300<x<400: 709, percentage: 0.22
+>400: 773, percentage: 0.24
+
+Data for Sentiment
+negative: 733, percentage: 0.23
+neutral: 15, percentage: 0.01
+positive: 2475, percentage: 0.77
+
+Data for Grammy Winners
+True: 405, percentage: 0.13
+False: 2818, percentage: 0.88

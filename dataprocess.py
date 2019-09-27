@@ -1,4 +1,5 @@
 import json
+import math
 import random
 
 def total_genre(json_array, genreDict):
@@ -81,7 +82,7 @@ def count_grammy(json_array, dict):
     for object in json_array:
         songs = object["songs"]
         for song in songs:
-            field = song["WonGrammy"]
+            field = song["wonGrammy"]
             if field == True:
                 dict["True"] = dict["True"]+1
             else:
@@ -113,10 +114,22 @@ def split_data(json_array, testarr, trainarr):
         testarr.append(testObjectToAdd)
         trainarr.append(trainObjectToAdd)
 
+def printDict(dict, name):
+    print("Data for " + name)
+    total = 0
+    for key in dict:
+        total += dict[key]
+    for key in dict:
+        perc = round_up(dict[key]/total, 2)
+        print(key + ": " + str(dict[key]) + ", percentage: " + str(perc))
+    print()
 
+def round_up(n, decimals=0):
+    multiplier = 10 ** decimals
+    return math.ceil(n * multiplier) / multiplier
 
 def main():
-    filename = "cleandata.json"
+    filename = "traindata.json"
 
     genres = {"rock" : 0,
             "alternative/indie" : 0,
@@ -176,20 +189,30 @@ def main():
 
     with open(filename) as json_file:
         data = json.load(json_file)
-        #total_genre(data, genres)
-        #total_readability(data, readability)
-        #total_difficulty(data, difficulty)
-        #count_dupes(data, dupes)
-        #count_words(data, numWords)
-        #count_sentiment(data, sentiment)
-        test = []
-        train = []
+        total_genre(data, genres)
+        total_readability(data, readability)
+        total_difficulty(data, difficulty)
+        count_dupes(data, dupes)
+        count_words(data, numWords)
+        count_sentiment(data, sentiment)
+        count_grammy(data, wonGrammy)
 
-        split_data(data, test, train)
-        with open("testdata.json", "w+") as writefile:
-            json.dump(test, writefile)
-        with open("traindata.json", "w+") as writefile:
-            json.dump(train, writefile)
+        printDict(genres, "Genres")
+        printDict(readability, "Readability")
+        printDict(difficulty, "Difficulty")
+        printDict(dupes, "Number of Duplicates")
+        printDict(numWords, "Number of Words")
+        printDict(sentiment, "Sentiment")
+        printDict(wonGrammy, "Grammy Winners")
+
+        # test = []
+        # train = []
+
+        # split_data(data, test, train)
+        # with open("testdata.json", "w+") as writefile:
+        #     json.dump(test, writefile)
+        # with open("traindata.json", "w+") as writefile:
+        #     json.dump(train, writefile)
 
 if __name__ == "__main__":
     main()
