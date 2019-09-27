@@ -87,14 +87,33 @@ def count_grammy(json_array, dict):
             else:
                 dict["False"] = dict["False"]+1
 
-def split_data(json_array):
-    arr = []
-    for i in range(100):
-        arr.append(i+1)
-    
-    # We choose 20 random chart rankings per year as test data.
-    test_indices = random.sample(arr, 20)
-    
+def split_data(json_array, testarr, trainarr):
+    for jsonobject in json_array:
+        testObjectToAdd = {
+            "songs" : [],
+            "year" : jsonobject["year"]
+        }
+
+        trainObjectToAdd = {
+            "songs" : [],
+            "year" : jsonobject["year"]
+        }
+
+        songs = jsonobject["songs"]
+        arr = []
+        for i in range(100):
+            arr.append(i+1)
+        # We choose 20 random chart rankings per year as test data.
+        test_indices = random.sample(arr, 20)
+        for song in songs:
+            if song["pos"] in test_indices:
+                testObjectToAdd["songs"].append(song)
+            else:
+                trainObjectToAdd["songs"].append(song)
+        testarr.append(testObjectToAdd)
+        trainarr.append(trainObjectToAdd)
+
+
 
 def main():
     filename = "cleandata.json"
@@ -162,8 +181,15 @@ def main():
         #total_difficulty(data, difficulty)
         #count_dupes(data, dupes)
         #count_words(data, numWords)
-        count_sentiment(data, sentiment)
-        print(sentiment)
+        #count_sentiment(data, sentiment)
+        test = []
+        train = []
+
+        split_data(data, test, train)
+        with open("testdata.json", "w+") as writefile:
+            json.dump(test, writefile)
+        with open("traindata.json", "w+") as writefile:
+            json.dump(train, writefile)
 
 if __name__ == "__main__":
     main()
