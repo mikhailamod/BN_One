@@ -124,9 +124,62 @@ def printDict(dict, name):
         print(key + ": " + str(dict[key]) + ", percentage: " + str(perc))
     print()
 
+def printDictPercOnly(dict, name):
+    print("Data for " + name)
+    total = 0
+    for key in dict:
+        total += dict[key]
+    for key in dict:
+        perc = round_up(dict[key]/total, 2)
+        print(perc)
+    print()
+
 def round_up(n, decimals=0):
     multiplier = 10 ** decimals
     return math.ceil(n * multiplier) / multiplier
+
+def num_words_prob(json_array, dict):
+    for obj in json_array:
+        songs = obj["songs"]
+        for song in songs:
+            sent = song["sentiment"]["compound"]
+            grammy = song["wonGrammy"]
+            readability = song["fog_index"]
+            if (sent < -0.05) and grammy == False and (readability >= 7):
+                if song["num_words"] < 200:
+                    dict["lt200"] = dict["lt200"] + 1
+                elif 200 <= song["num_words"] < 300:
+                    dict["gt200"] = dict["gt200"] +1
+                elif 300 <= song["num_words"] < 400:
+                    dict["gt300"] = dict["gt300"] +1
+                else:
+                    dict["gt400"] = dict["gt400"] +1
+
+def num_dupes_prob(data, dict):
+    for obj in data:
+        songs = obj["songs"]
+        for song in songs:
+            numWords = song["num_words"]
+            if (numWords >= 400):
+                if song["num_dupes"] < 20:
+                    dict["lt20"] +=1
+                elif 20 <= song["num_dupes"] < 30:
+                    dict["lt30"] += 1
+                elif 30 <= song["num_dupes"] < 50:
+                    dict["lt50"] += 1
+                else:
+                    dict["gt50"] += 1
+
+def genre_prob(data, dict):
+    for obj in data:
+        songs = obj["songs"]
+        for song in songs:
+            numWords = song["num_words"]
+            if (numWords >= 400):
+                tags = song["tags"]
+                for genre in tags:
+                    dict[genre] += 1
+
 
 def main():
     filename = "traindata.json"
@@ -187,23 +240,42 @@ def main():
         "False" : 0
     }
 
+    numWordsProb = {
+        "lt200": 0,
+        "gt200": 0,
+        "gt300": 0,
+        "gt400": 0
+    }
+
+    numDupesProb = {
+        "lt20": 0,
+        "lt30": 0,
+        "lt50": 0,
+        "gt50": 0
+    }
+
     with open(filename) as json_file:
         data = json.load(json_file)
-        total_genre(data, genres)
-        total_readability(data, readability)
-        total_difficulty(data, difficulty)
-        count_dupes(data, dupes)
-        count_words(data, numWords)
-        count_sentiment(data, sentiment)
-        count_grammy(data, wonGrammy)
+        # total_genre(data, genres)
+        # total_readability(data, readability)
+        # total_difficulty(data, difficulty)
+        # count_dupes(data, dupes)
+        # count_words(data, numWords)
+        # count_sentiment(data, sentiment)
+        # count_grammy(data, wonGrammy)
+        # num_words_prob(data, numWordsProb)
+        # num_dupes_prob(data, numDupesProb)
+        genre_prob(data, genres)
+        printDictPercOnly(genres, "Genre prob")
+        #print(genres)
 
-        printDict(genres, "Genres")
-        printDict(readability, "Readability")
-        printDict(difficulty, "Difficulty")
-        printDict(dupes, "Number of Duplicates")
-        printDict(numWords, "Number of Words")
-        printDict(sentiment, "Sentiment")
-        printDict(wonGrammy, "Grammy Winners")
+        # printDict(genres, "Genres")
+        # printDict(readability, "Readability")
+        # printDict(difficulty, "Difficulty")
+        # printDict(dupes, "Number of Duplicates")
+        # printDict(numWords, "Number of Words")
+        # printDict(sentiment, "Sentiment")
+        # printDict(wonGrammy, "Grammy Winners")
 
         # test = []
         # train = []
